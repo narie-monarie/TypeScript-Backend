@@ -5,9 +5,10 @@ const router: Router = Router()
 const prisma = new PrismaClient()
 //post a product
 router.post('/', async (req: Request, res: Response) => {
-    const { name, image, product_description, price, location } = req.body
+    const { userId, name, image, product_description, price, location } = req.body
     const result = await prisma.product.create({
         data: {
+            userId, // TODO - To Be managed by an Authorized user
             name,
             image,
             product_description,
@@ -20,10 +21,11 @@ router.post('/', async (req: Request, res: Response) => {
 
 //get all products
 router.get('/', async (req: Request, res: Response) => {
-    const allProducts = await prisma.product.findMany();
+    const allProducts = await prisma.product.findMany({
+        include: { User: true }
+    });
     res.status(200).json(allProducts)
 })
-
 //get a single product
 router.get('/:id', async (req: Request, res: Response) => {
     const { id } = req.params
@@ -32,6 +34,10 @@ router.get('/:id', async (req: Request, res: Response) => {
             id: Number(id)
         }
     })
+
+    if (!product) {
+        res.status(404).json({ error: "Product not available" })
+    }
     res.status(201).json(product)
 })
 
