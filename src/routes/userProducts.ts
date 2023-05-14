@@ -32,29 +32,16 @@ router.get('/', async (req: Request, res: Response) => {
                 },
             }
         },
-        //     select: {
-        //       id: true,
-        //     product_description: true,
-        //   User: {
-        //     select: {
-        //       id: true,
-        //     name: true,
-        //   username: true,
-        // image: true,
-        //}
-        //}
-        //}
-        //cannot use include and select
     });
     res.status(200).json(allProducts)
 })
+
 //get a single product
 router.get('/:id', async (req: Request, res: Response) => {
     const { id } = req.params
     const product = await prisma.product.findUnique({
-        where: {
-            id: Number(id)
-        }
+        where: { id: Number(id) },
+        include: { User: true }
     })
 
     if (!product) {
