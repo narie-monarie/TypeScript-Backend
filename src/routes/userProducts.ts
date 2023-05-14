@@ -23,6 +23,19 @@ router.post('/', async (req: Request, res: Response) => {
 router.get('/', async (req: Request, res: Response) => {
     const allProducts = await prisma.product.findMany({
         include: { User: true }
+        //     select: {
+        //       id: true,
+        //     product_description: true,
+        //   User: {
+        //     select: {
+        //       id: true,
+        //     name: true,
+        //   username: true,
+        // image: true,
+        //}
+        //}
+        //}
+        //cannot use include and select
     });
     res.status(200).json(allProducts)
 })
