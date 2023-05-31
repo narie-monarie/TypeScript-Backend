@@ -3,6 +3,7 @@ import { Router, Request, Response } from "express";
 
 const router: Router = Router()
 const prisma = new PrismaClient()
+
 //post a product
 router.post('/', async (req: Request, res: Response) => {
     const { userId, name, image, product_description, price, location } = req.body
